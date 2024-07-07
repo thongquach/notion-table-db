@@ -1,3 +1,6 @@
+import Box from "@mui/material/Box";
+import { useDemoData } from "@mui/x-data-grid-generator";
+import { DataGridPro } from "@mui/x-data-grid-pro";
 import { useState } from "react";
 
 // Copy the payload shape interface from our server
@@ -12,10 +15,15 @@ function App() {
   // A state value will store the current state of the array of data which can be updated
   // by editing your database in Notion and then pressing the fetch button again
   const [thingsToLearn, setThingsToLearn] = useState<ThingToLearn[]>([]);
+  const { data } = useDemoData({
+    dataSet: "Commodity",
+    rowLength: 100000,
+    editable: true,
+  });
 
   return (
     <div>
-      <h1>Things to Learn</h1>
+      <h1>Sales CRM</h1>
       <button
         type="button"
         onClick={() => {
@@ -43,6 +51,15 @@ function App() {
           );
         })}
       </ol>
+      <Box sx={{ height: 520, width: "100%" }}>
+        <DataGridPro
+          {...data}
+          loading={data.rows.length === 0}
+          rowHeight={38}
+          checkboxSelection
+          disableRowSelectionOnClick
+        />
+      </Box>
     </div>
   );
 }
