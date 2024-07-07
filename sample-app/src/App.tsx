@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import { DataGridPro } from "@mui/x-data-grid-pro";
 import { useEffect, useState } from "react";
 import { Customer } from "./types";
+import { getCustomers } from "./utils/api";
 
 function App() {
   const [customer, setCustomers] = useState<Customer[]>([]);
@@ -21,12 +22,9 @@ function App() {
     ],
   };
 
-  const fetchCustomers = () => {
-    fetch("http://localhost:8000/")
-      .then((response) => response.json())
-      .then((payload) => {
-        setCustomers(payload);
-      });
+  const fetchCustomers = async () => {
+    const customers = await getCustomers();
+    setCustomers(customers);
   };
 
   useEffect(() => {
@@ -36,7 +34,7 @@ function App() {
   return (
     <Box>
       <Typography variant="h3">Sales CRM</Typography>
-      <Button onClick={fetchCustomers}>Fetch List</Button>
+      <Button onClick={fetchCustomers}>Fetch Customers</Button>
       <Box sx={{ height: 600, width: "100%" }}>
         <DataGridPro
           {...data}
