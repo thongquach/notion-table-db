@@ -1,15 +1,13 @@
-import { Button, Typography } from "@mui/material";
-import Box from "@mui/material/Box";
+import { Container, Typography } from "@mui/material";
 import { DataGridPro, GridSortModel } from "@mui/x-data-grid-pro";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Customer } from "./types";
 import { getCustomers } from "./utils/api";
 
 function App() {
   const [customer, setCustomers] = useState<Customer[]>([]);
-  const data = {
-    rows: customer,
-    columns: [
+  const columns = useMemo(
+    () => [
       { field: "name", headerName: "Name", width: 150 },
       { field: "company", headerName: "Company", width: 150 },
       { field: "email", headerName: "Email", width: 150 },
@@ -20,7 +18,8 @@ function App() {
       { field: "status", headerName: "Status", width: 150 },
       { field: "priority", headerName: "Priority", width: 150 },
     ],
-  };
+    []
+  );
 
   const [sortModel, setSortModel] = useState<GridSortModel>([]);
 
@@ -35,23 +34,22 @@ function App() {
   }, []);
 
   return (
-    <Box>
+    <Container>
       <Typography variant="h3">Sales CRM</Typography>
-      <Button onClick={() => fetchCustomer([])}>Fetch Customers</Button>
-      <Box sx={{ height: 600, width: "100%" }}>
-        <DataGridPro
-          {...data}
-          loading={data.rows.length === 0}
-          rowHeight={40}
-          sortModel={sortModel}
-          onSortModelChange={(newSortModel) => {
-            setCustomers([]);
-            setSortModel(newSortModel);
-            fetchCustomer(newSortModel);
-          }}
-        />
-      </Box>
-    </Box>
+      <DataGridPro
+        rows={customer}
+        columns={columns}
+        loading={customer.length === 0}
+        rowHeight={40}
+        sortModel={sortModel}
+        onSortModelChange={(newSortModel) => {
+          setCustomers([]);
+          setSortModel(newSortModel);
+          fetchCustomer(newSortModel);
+        }}
+        style={{ height: 600 }}
+      />
+    </Container>
   );
 }
 
