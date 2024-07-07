@@ -11,3 +11,13 @@ export interface Customer {
   lastContact: string;
   company: string;
 }
+
+export type GridSortModel = {
+  field: string;
+  sort: 'asc' | 'desc';
+}[];
+
+export type NotionSortModel = {
+  property: string;
+  direction: 'ascending' | 'descending';
+}[];

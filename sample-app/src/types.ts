@@ -12,3 +12,5 @@ export interface Customer {
   lastContact: string;
   company: string;
 }
+
+export type CustomerField = keyof Customer;

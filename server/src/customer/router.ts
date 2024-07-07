@@ -6,7 +6,8 @@ const customerRouter = express.Router();
 
 customerRouter.get('/', async (req, res) => {
   try {
-    const customers = await getCustomers();
+    const gridSortModel = (req.query.sortModel as string[] | undefined)?.map((item) => JSON.parse(item));
+    const customers = await getCustomers(Array.isArray(gridSortModel) ? gridSortModel : undefined);
     return res.status(200).json(customers);
   } catch (error) {
     console.error(error);

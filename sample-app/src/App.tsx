@@ -1,6 +1,6 @@
 import { Button, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
-import { DataGridPro } from "@mui/x-data-grid-pro";
+import { DataGridPro, GridSortModel } from "@mui/x-data-grid-pro";
 import { useEffect, useState } from "react";
 import { Customer } from "./types";
 import { getCustomers } from "./utils/api";
@@ -22,26 +22,33 @@ function App() {
     ],
   };
 
-  const fetchCustomers = async () => {
-    const customers = await getCustomers();
+  const [sortModel, setSortModel] = useState<GridSortModel>([]);
+
+  const fetchCustomer = async (sortModel: GridSortModel) => {
+    const customers = await getCustomers(sortModel);
     setCustomers(customers);
   };
 
   useEffect(() => {
-    fetchCustomers();
+    fetchCustomer([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Box>
       <Typography variant="h3">Sales CRM</Typography>
-      <Button onClick={fetchCustomers}>Fetch Customers</Button>
+      <Button onClick={() => fetchCustomer([])}>Fetch Customers</Button>
       <Box sx={{ height: 600, width: "100%" }}>
         <DataGridPro
           {...data}
           loading={data.rows.length === 0}
-          rowHeight={38}
-          checkboxSelection
-          disableRowSelectionOnClick
+          rowHeight={40}
+          sortModel={sortModel}
+          onSortModelChange={(newSortModel) => {
+            setCustomers([]);
+            setSortModel(newSortModel);
+            fetchCustomer(newSortModel);
+          }}
         />
       </Box>
     </Box>
