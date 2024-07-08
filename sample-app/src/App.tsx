@@ -10,12 +10,6 @@ const FILTER_OPTIONS = [
   { property: "Name", label: "Name", type: "rich_text" },
   { property: "Company", label: "Company", type: "rich_text" },
   {
-    property: "Priority",
-    label: "Priority",
-    type: "select",
-    options: ["High", "Medium", "Low"] as string[],
-  },
-  {
     property: "Status",
     label: "Status",
     type: "select",
@@ -28,6 +22,14 @@ const FILTER_OPTIONS = [
       "Lead",
     ] as string[],
   },
+  {
+    property: "Priority",
+    label: "Priority",
+    type: "select",
+    options: ["High", "Medium", "Low"] as string[],
+  },
+  { property: "Email", label: "Email", type: "rich_text" },
+  { property: "Phone", label: "Phone", type: "rich_text" },
 ] as const;
 
 function App() {
@@ -78,6 +80,7 @@ function App() {
   return (
     <Container>
       <Typography variant="h3">Sales CRM</Typography>
+      {/* reusability: this Filters component can be reused. The interface is simple and hides all implementation details */}
       <Filters value={filters} onChange={setFilters} options={FILTER_OPTIONS} />
       <Button onClick={() => fetchCustomer(sortModel, filters)}>
         Apply Filter
