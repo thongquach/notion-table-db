@@ -7,8 +7,15 @@ import { Customer } from "./types";
 import { getCustomers } from "./utils/api";
 
 const FILTER_OPTIONS = [
-  { property: "Name", label: "Name", type: "string" },
-  { property: "Company", label: "Company", type: "string" },
+  { property: "Name", label: "Name", type: "rich_text" },
+  { property: "Company", label: "Company", type: "rich_text" },
+  {
+    property: "Priority",
+    label: "Priority",
+    type: "select",
+    options: ["High", "Medium", "Low"] as string[],
+  },
+  // { property: "Status", label: "Status", type: "select" },
 ] as const;
 
 function App() {
@@ -35,11 +42,16 @@ function App() {
     sortModel?: GridSortModel,
     filters?: FilterValue[]
   ) => {
-    setLoading(true);
-    setCustomers([]);
-    const customers = await getCustomers(sortModel, filters);
-    setCustomers(customers);
-    setLoading(false);
+    try {
+      setLoading(true);
+      setCustomers([]);
+      const customers = await getCustomers(sortModel, filters);
+      setCustomers(customers);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {

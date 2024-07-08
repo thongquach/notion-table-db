@@ -38,14 +38,11 @@ export const toNotionSortModel = (gridSortModel: GridSortModel) => {
   return notionSortModel;
 };
 
-const FILTER_TYPE_MAP = {
-  string: "rich_text",
-} as const;
-
 const toNotionFilter = (filter: FilterValue) => {
+  console.log(filter);
   return {
     property: filter.property,
-    [FILTER_TYPE_MAP[filter.type]]: {
+    [filter.type]: {
       [filter.operator]: filter.value,
     },
   };

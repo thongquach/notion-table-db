@@ -4,6 +4,7 @@ import Filter from "./Filter";
 import { FilterValue, Options } from "./types";
 import { getDefaultFilter } from "./utils";
 
+// TODO: implement delete
 const Filters = ({
   value,
   onChange,

@@ -10,6 +10,8 @@ export const getDefaultFilter = ({
   nested: boolean;
   options: Options;
 }): FilterValue => {
+  const defaultOption = options[0];
+
   let compound: Compound = "where";
   if (value.length === 1) {
     compound = "and";
@@ -19,17 +21,17 @@ export const getDefaultFilter = ({
 
   return {
     compound,
-    property: options[0].property,
-    type: options[0].type,
-    operator: OPERATORS_MAP[options[0].type][0],
+    property: defaultOption.property,
+    type: defaultOption.type,
+    operator: OPERATORS_MAP[defaultOption.type][0],
     value: "",
     nested: nested
       ? [
           {
             compound: "where",
-            property: options[0].property,
-            type: options[0].type,
-            operator: OPERATORS_MAP[options[0].type][0],
+            property: defaultOption.property,
+            type: defaultOption.type,
+            operator: OPERATORS_MAP[defaultOption.type][0],
             value: "",
             nested: [],
           },

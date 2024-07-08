@@ -1,6 +1,6 @@
 import { Box, Button, MenuItem, Select, Typography } from "@mui/material";
 import { useEffect } from "react";
-import { COMPONENT_MAP, COMPOUND_OPTIONS } from "./const";
+import { COMPONENT_MAP, COMPOUND_OPTIONS, OPERATORS_MAP } from "./const";
 import { FilterValue, Options } from "./types";
 import { getDefaultFilter } from "./utils";
 
@@ -16,11 +16,20 @@ const Filter = ({
   index: number;
 }) => {
   const compound = value.nested.length >= 2 ? value.nested[1].compound : "and";
-  const handleChange = (
-    newValue: string | undefined,
-    property: keyof FilterValue
-  ) => {
-    onChange({ ...value, [property]: newValue });
+  const handleChange = (newValue: string, property: keyof FilterValue) => {
+    if (property === "property") {
+      console.log({ property, options });
+      const option = options.find((option) => option.property === newValue)!;
+      onChange({
+        ...value,
+        [property]: newValue,
+        type: option.type,
+        operator: OPERATORS_MAP[option.type][0],
+        value: "",
+      });
+    } else {
+      onChange({ ...value, [property]: newValue });
+    }
   };
 
   const handleNestedChange = (newValue: FilterValue, index: number) => {
@@ -110,10 +119,11 @@ const Filter = ({
           </Select>
           {FilterComponent && (
             <FilterComponent
-              operator={value.operator || ""}
-              setOperator={(operator) => handleChange(operator, "operator")}
-              value={value.value || ""}
-              setValue={(value) => handleChange(value, "value")}
+              value={value}
+              onChange={onChange}
+              option={
+                options.find((option) => option.property === value.property)!
+              }
             />
           )}
         </>

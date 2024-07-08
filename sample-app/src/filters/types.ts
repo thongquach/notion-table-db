@@ -1,6 +1,11 @@
-import { OPERATORS_MAP } from "./const";
+export type FilterType = "rich_text" | "select";
 
-export type FilterType = keyof typeof OPERATORS_MAP;
+type Option = { property: string; label: string } & (
+  | { type: "rich_text" }
+  | { type: "select"; options: string[] }
+);
+export type Options = Readonly<Option[]>;
+
 export type Compound = "and" | "or" | "where";
 
 export type FilterValue = {
@@ -12,5 +17,8 @@ export type FilterValue = {
   nested: FilterValue[];
 };
 
-type Option = { property: string; label: string; type: FilterType };
-export type Options = Readonly<Option[]>;
+export type FilterComponentProps = {
+  value: FilterValue;
+  onChange: (value: FilterValue) => void;
+  option: Option;
+};

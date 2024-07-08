@@ -1,39 +1,29 @@
-import { MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { MenuItem, Select, TextField } from "@mui/material";
 import { OPERATORS_MAP } from "./const";
+import { FilterComponentProps, FilterValue } from "./types";
 
-const StringFilter = ({
-  operator,
-  setOperator,
-  value,
-  setValue,
-}: {
-  operator: string;
-  setOperator: (operator: string) => void;
-  value: string;
-  setValue: (value: string) => void;
-}) => {
-  const handleOperatorChange = (event: SelectChangeEvent) => {
-    setOperator(event.target.value as string);
-  };
-
-  const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
+const StringFilter = ({ value, onChange }: FilterComponentProps) => {
+  const handleChange = (newValue: string, property: keyof FilterValue) => {
+    onChange({ ...value, [property]: newValue });
   };
 
   return (
     <>
       <Select
-        value={operator}
-        onChange={handleOperatorChange}
+        value={value.operator}
+        onChange={(event) => handleChange(event.target.value, "operator")}
         sx={{ minWidth: 200 }}
       >
-        {OPERATORS_MAP.string.map((value) => (
+        {OPERATORS_MAP.rich_text.map((value) => (
           <MenuItem key={value} value={value}>
             {value}
           </MenuItem>
         ))}
       </Select>
-      <TextField value={value} onChange={handleValueChange} />
+      <TextField
+        value={value.value}
+        onChange={(event) => handleChange(event.target.value, "value")}
+      />
     </>
   );
 };
