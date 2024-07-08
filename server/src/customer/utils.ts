@@ -1,37 +1,6 @@
 import { QueryDatabaseResponse } from '@notionhq/client/build/src/api-endpoints';
 
-import { Customer, GridSortModel, NotionSortModel } from './types';
-
-const PROPERTY_MAP = {
-  priority: 'Priority',
-  status: 'Status',
-  expectedClose: 'Expected Close',
-  added: 'Added',
-  phone: 'Phone',
-  estimatedValue: 'Estimated Value',
-  email: 'Email',
-  name: 'Name',
-  lastContact: 'Last Contact',
-  company: 'Company',
-} as const;
-
-const DIRECTION_MAP = {
-  asc: 'ascending',
-  desc: 'descending',
-} as const;
-
-export const toNotionSortModel = (gridSortModel: GridSortModel): NotionSortModel => {
-  const notionSortModel = gridSortModel.map((sortObj) => {
-    const { field, sort } = sortObj;
-
-    return {
-      property: PROPERTY_MAP[field as keyof typeof PROPERTY_MAP],
-      direction: DIRECTION_MAP[sort],
-    };
-  });
-
-  return notionSortModel;
-};
+import { Customer } from './types';
 
 export const convertQueryToCustomers = (query: QueryDatabaseResponse): Customer[] => {
   const customers = query.results.map((page) => {

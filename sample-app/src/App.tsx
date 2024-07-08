@@ -46,6 +46,10 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    console.log({ filters });
+  }, [filters]);
+
   return (
     <Container>
       <Typography variant="h3">Sales CRM</Typography>

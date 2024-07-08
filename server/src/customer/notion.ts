@@ -1,8 +1,8 @@
 import { Client } from '@notionhq/client';
 import { QueryDatabaseParameters } from '@notionhq/client/build/src/api-endpoints';
 
-import { Customer, GridSortModel } from './types';
-import { convertQueryToCustomers, toNotionSortModel } from './utils';
+import { Customer } from './types';
+import { convertQueryToCustomers } from './utils';
 
 const databaseId = process.env.NOTION_DATABASE_ID;
 const notionSecret = process.env.NOTION_SECRET;
@@ -16,12 +16,12 @@ const notion = new Client({
 });
 
 export const getCustomers = async (
-  gridSortModel?: GridSortModel,
+  sortModel?: QueryDatabaseParameters['sorts'],
   filter?: QueryDatabaseParameters['filter'],
 ): Promise<Customer[]> => {
   const query = await notion.databases.query({
     database_id: databaseId,
-    sorts: gridSortModel ? toNotionSortModel(gridSortModel) : undefined,
+    sorts: sortModel,
     filter: filter,
   });
 

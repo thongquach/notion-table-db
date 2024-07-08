@@ -1,12 +1,6 @@
 import { Box, Button, MenuItem, Select } from "@mui/material";
 import { FilterValue, Options } from ".";
-import StringFilter from "./StringFilter";
-
-const COMPONENT_MAP = {
-  string: StringFilter,
-};
-
-const COMPOUND = ["and", "or", "where"];
+import { COMPONENT_MAP, COMPOUND } from "./const";
 
 const Filter = ({
   value,
