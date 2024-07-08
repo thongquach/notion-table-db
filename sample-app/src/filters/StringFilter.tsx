@@ -25,7 +25,7 @@ const StringFilter = ({
       <Select
         value={operator}
         onChange={handleOperatorChange}
-        sx={{ minWidth: 100 }}
+        sx={{ minWidth: 200 }}
       >
         {OPERATORS_MAP.string.map((value) => (
           <MenuItem key={value} value={value}>

@@ -1,5 +1,6 @@
 import { GridSortModel } from "@mui/x-data-grid-pro";
-import { toNotionSortModel } from "../api";
+import { FilterValue } from "../../filters";
+import { toNotionFilters, toNotionSortModel } from "../api";
 
 describe("toNotionSortModel", () => {
   it("should convert MUI GridSortModel to Notion sort model", () => {
@@ -22,36 +23,83 @@ describe("toNotionSortModel", () => {
     expect(notionSortModel).toEqual([]);
   });
 });
-// describe("toNotionFilters", () => {
-//     it("should convert an array of FilterValue to Notion filters", () => {
-//         const filters: FilterValue[] = [
-//             { property: "name", operator: "equals", value: "active" },
-//             { column: "priority", operator: "greaterThan", value: 3 },
-//         ];
-//         const notionFilters = toNotionFilters(filters);
+describe("toNotionFilters", () => {
+  it.each([
+    [[], []],
+    [
+      [
+        {
+          compound: "where",
+          property: "Name",
+          type: "string",
+          operator: "contains",
+          value: "Mike",
+          nested: [],
+        },
+      ],
+      {
+        property: "Name",
+        rich_text: {
+          contains: "Mike",
+        },
+      },
+    ],
+    [
+      [
+        {
+          compound: "where",
+          property: "Name",
+          type: "string",
+          operator: "contains",
+          value: "Mike",
+          nested: [],
+        },
+        {
+          compound: "and",
+          property: "Company",
+          type: "string",
+          operator: "contains",
+          value: "Tech",
+          nested: [],
+        },
+        {
+          compound: "and",
+          property: "Name",
+          type: "string",
+          operator: "contains",
+          value: "Mendez",
+          nested: [],
+        },
+      ],
+      {
+        and: [
+          {
+            property: "Name",
+            rich_text: {
+              contains: "Mike",
+            },
+          },
+          {
+            property: "Company",
+            rich_text: {
+              contains: "Tech",
+            },
+          },
+          {
+            property: "Name",
+            rich_text: {
+              contains: "Mendez",
+            },
+          },
+        ],
+      },
+    ],
+  ])(
+    "should convert an array of FilterValue to Notion filters",
+    (filters, expectedNotionFilters) => {
+      const notionFilters = toNotionFilters(filters as FilterValue[]);
 
-//         expect(notionFilters).toEqual([
-//             {
-//                 property: "Status",
-//                 filter: {
-//                     operator: "equals",
-//                     value: "active",
-//                 },
-//             },
-//             {
-//                 property: "Priority",
-//                 filter: {
-//                     operator: "greater_than",
-//                     value: 3,
-//                 },
-//             },
-//         ]);
-//     });
-
-//     it("should return an empty array if filters is empty", () => {
-//         const filters: FilterValue[] = [];
-//         const notionFilters = toNotionFilters(filters);
-
-//         expect(notionFilters).toEqual([]);
-//     });
-// });
+      expect(notionFilters).toEqual(expectedNotionFilters);
+    }
+  );
+});

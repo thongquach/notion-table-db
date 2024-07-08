@@ -63,7 +63,7 @@ function App() {
         sortModel={sortModel}
         onSortModelChange={(newSortModel) => {
           setSortModel(newSortModel);
-          fetchCustomer(newSortModel);
+          fetchCustomer(newSortModel, filters);
         }}
         disableColumnMenu
         style={{ height: 600 }}
