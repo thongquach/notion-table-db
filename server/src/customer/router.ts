@@ -1,3 +1,4 @@
+import { QueryDatabaseParameters } from '@notionhq/client/build/src/api-endpoints';
 import express from 'express';
 
 import { getCustomers } from './notion';
@@ -6,9 +7,8 @@ const customerRouter = express.Router();
 
 customerRouter.get('/', async (req, res) => {
   try {
-    const sortModel = (req.query.sortModel as string[] | undefined)?.map((item) => JSON.parse(item));
-    const filtersString = req.query.filters as string | undefined;
-    const filters = filtersString ? JSON.parse(filtersString) : undefined;
+    const sortModel = req.query.sortModel as QueryDatabaseParameters['sorts'] | undefined;
+    const filters = req.query.filters as QueryDatabaseParameters['filter'] | undefined;
 
     const customers = await getCustomers(sortModel, filters);
     return res.status(200).json(customers);

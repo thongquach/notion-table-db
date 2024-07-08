@@ -56,7 +56,7 @@ export const toNotionFilters = (filters: FilterValue[]) => {
     return [];
   }
   if (filters.length === 1) {
-    return filters.map((filter) => toNotionFilter(filter));
+    return toNotionFilter(filters[0]);
   }
 
   return {
