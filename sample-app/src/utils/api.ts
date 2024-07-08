@@ -22,20 +22,16 @@ const convertFilter = (filter: FilterValue) => {
 
 const convertFilters = (filters?: FilterValue[]) => {
   if (!filters) {
-    return undefined;
+    return [];
   }
 
   if (filters.length === 1) {
     return filters.map((filter) => convertFilter(filter));
-  }
-
-  if (filters?.length === 2) {
+  } else {
     return {
       [filters[1].compound]: filters.map((filter) => convertFilter(filter)),
     };
   }
-
-  return []; // Return an empty array or handle other cases as needed
 };
 
 export const getCustomers = async (
