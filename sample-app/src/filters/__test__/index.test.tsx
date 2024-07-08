@@ -11,3 +11,5 @@ describe("Filters", () => {
     // verify by simulating user interactions and checking the output texts
   });
 });
+
+export {};

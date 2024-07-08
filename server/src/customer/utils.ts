@@ -35,9 +35,35 @@ export const convertQueryToCustomers = (query: QueryDatabaseResponse): Customer[
   return customers;
 };
 
-export const replaceStringTrueWithBooleanTrue = <T extends Record<string, unknown>>(
-  obj: T | undefined,
-): T | undefined => {
+// temporary workaround because data received by BE has braces in keys
+// we should probably use POST instead of GET but I got not much time left
+const removeBracesInObjectKeys = <T extends Record<string, unknown>>(obj: T): T => {
+  const newObj = {} as T;
+
+  for (const key in obj) {
+    // eslint-disable-next-line no-useless-escape
+    const newKey = key.replace(/[\[\]]/g, '');
+    if (Array.isArray(obj[key])) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      newObj[newKey] = (obj[key] as Array<any>).map((item) =>
+        typeof item === 'object' && item !== null ? removeBracesInObjectKeys(item) : item,
+      );
+    } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      newObj[newKey] = removeBracesInObjectKeys(obj[key] as Record<string, unknown>);
+    } else {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      newObj[newKey] = obj[key];
+    }
+  }
+  return newObj;
+};
+
+const replaceStringTrueWithBooleanTrue = <T extends Record<string, unknown>>(obj: T): T => {
   if (typeof obj !== 'object' || obj === null) {
     return obj;
   }
@@ -55,4 +81,14 @@ export const replaceStringTrueWithBooleanTrue = <T extends Record<string, unknow
   }
 
   return obj;
+};
+
+export const sanitizeFilters = <T extends Record<string, unknown>>(filters: T | undefined): T | undefined => {
+  if (typeof filters !== 'object' || filters === null) {
+    return undefined;
+  }
+
+  let newFilters = removeBracesInObjectKeys(filters);
+  newFilters = replaceStringTrueWithBooleanTrue(newFilters);
+  return newFilters;
 };

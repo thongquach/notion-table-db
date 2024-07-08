@@ -2,7 +2,7 @@ import { Client } from '@notionhq/client';
 import { QueryDatabaseParameters } from '@notionhq/client/build/src/api-endpoints';
 
 import { Customer } from './types';
-import { convertQueryToCustomers, replaceStringTrueWithBooleanTrue } from './utils';
+import { convertQueryToCustomers, sanitizeFilters } from './utils';
 
 const databaseId = process.env.NOTION_DATABASE_ID;
 const notionSecret = process.env.NOTION_SECRET;
@@ -19,12 +19,13 @@ export const getCustomers = async (
   sortModel?: QueryDatabaseParameters['sorts'],
   filter?: QueryDatabaseParameters['filter'],
 ): Promise<Customer[]> => {
+  console.log(JSON.stringify(sanitizeFilters(filter), null, 2));
+
   const query = await notion.databases.query({
     database_id: databaseId,
     sorts: sortModel,
-    // TODO: maybe we should use POST instead of GET so that boolean is not converted to string
-    filter: replaceStringTrueWithBooleanTrue(filter),
+    // TODO: maybe we should use POST instead of GET so that boolean is not converted to string and keys are not added braces
+    filter: sanitizeFilters(filter),
   });
-
   return convertQueryToCustomers(query);
 };

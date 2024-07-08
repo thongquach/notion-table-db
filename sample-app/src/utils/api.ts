@@ -40,6 +40,10 @@ export const toNotionSortModel = (gridSortModel: GridSortModel) => {
 };
 
 const replaceSpaces = (str: string) => str.replace(/\s/g, "_");
+
+// extensibility: this function can be extended to support more filter types
+// by using a map of filter types to converter functions
+// for now, I combined all the filter types into one function since there are only 2 types
 const toNotionFilter = (filter: FilterValue) => {
   return {
     property: filter.property,
@@ -53,10 +57,7 @@ const toNotionFilter = (filter: FilterValue) => {
   };
 };
 
-export const toNotionFilters = (filters: FilterValue[]) => {
-  if (filters.length === 0) {
-    return [];
-  }
+const toSimpleNotionFilters = (filters: FilterValue[]) => {
   if (filters.length === 1) {
     return toNotionFilter(filters[0]);
   }
@@ -64,6 +65,34 @@ export const toNotionFilters = (filters: FilterValue[]) => {
   return {
     [filters[1].compound]: filters.map((filter) => toNotionFilter(filter)),
   };
+};
+
+// NOTE: this implementation is rough and was not tested thoroughly
+const toNestedNotionFilters = (filters: FilterValue[]) => {
+  const mainCompound = filters[1].compound;
+  const result: { [key: string]: any[] } = {
+    [mainCompound]: [],
+  };
+
+  filters.forEach((filter) => {
+    if (!filter.nested.length)
+      result[mainCompound].push(toNotionFilter(filter));
+    else {
+      result[mainCompound].push(toNestedNotionFilters(filter.nested));
+    }
+  });
+
+  return result;
+};
+
+export const toNotionFilters = (filters: FilterValue[]) => {
+  if (filters.length === 0) {
+    return [];
+  }
+  const isSimpleFilters = filters.every((filter) => filter.nested.length === 0);
+  return isSimpleFilters
+    ? toSimpleNotionFilters(filters)
+    : toNestedNotionFilters(filters);
 };
 
 export const getCustomers = async (
