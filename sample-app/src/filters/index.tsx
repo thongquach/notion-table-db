@@ -12,6 +12,9 @@ export type FilterValue = {
   nested: FilterValue[];
 };
 
+type Option = { property: string; label: string; type: FilterType };
+export type Options = Readonly<Option[]>;
+
 const Filters = ({
   value,
   onChange,
@@ -19,7 +22,7 @@ const Filters = ({
 }: {
   value: FilterValue[];
   onChange: (value: FilterValue[]) => void;
-  options: Readonly<{ property: string; label: string; type: FilterType }[]>;
+  options: Options;
 }) => {
   const handleFilterChange = (updatedFilter: FilterValue) => {
     const index = value.findIndex((filter) => filter.id === updatedFilter.id);
@@ -72,7 +75,12 @@ const Filters = ({
   return (
     <Box>
       {value.map((filter, index) => (
-        <Filter key={index} value={filter} onChange={handleFilterChange} />
+        <Filter
+          key={index}
+          value={filter}
+          onChange={handleFilterChange}
+          options={options}
+        />
       ))}
       <Button onClick={addFilterRule}>Add Filter Rule</Button>
       <Button onClick={addFilterGroup}>Add Filter Group</Button>

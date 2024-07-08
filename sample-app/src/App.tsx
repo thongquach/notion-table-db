@@ -5,7 +5,7 @@ import Filters, { FilterValue } from "./filters";
 import { Customer } from "./types";
 import { getCustomers } from "./utils/api";
 
-export const FILTER_OPTIONS = [
+const FILTER_OPTIONS = [
   { property: "Name", label: "Name", type: "string" },
   { property: "Company", label: "Company", type: "string" },
 ] as const;

@@ -1,13 +1,8 @@
 import { Box, Button, MenuItem, Select } from "@mui/material";
-import { FilterValue } from ".";
+import { FilterValue, Options } from ".";
 import StringFilter from "./StringFilter";
 
-export const options = [
-  { field: "Name", label: "Name", type: "string" },
-  { field: "Company", label: "Company", type: "string" },
-] as const;
-
-const FILTER_MAP = {
+const COMPONENT_MAP = {
   string: StringFilter,
 };
 
@@ -16,9 +11,11 @@ const COMPOUND = ["and", "or", "where"];
 const Filter = ({
   value,
   onChange,
+  options,
 }: {
   value: FilterValue;
   onChange: (value: FilterValue) => void;
+  options: Options;
 }) => {
   const handleChange = (
     newValue: string | undefined,
@@ -34,7 +31,7 @@ const Filter = ({
     });
   };
 
-  const FilterComponent = value.type && FILTER_MAP[value.type];
+  const FilterComponent = value.type && COMPONENT_MAP[value.type];
 
   const addFilterRule = () => {
     const newFilter = {
@@ -101,6 +98,7 @@ const Filter = ({
               key={index}
               value={nestedValue}
               onChange={(newValue) => handleNestedChange(newValue, index)}
+              options={options}
             />
           ))}
           <Box>
@@ -115,8 +113,8 @@ const Filter = ({
             onChange={(e) => handleChange(e.target.value, "property")}
             sx={{ minWidth: 100 }}
           >
-            {options.map(({ field, label }) => (
-              <MenuItem key={field} value={field}>
+            {options.map(({ property, label }) => (
+              <MenuItem key={property} value={property}>
                 {label}
               </MenuItem>
             ))}
