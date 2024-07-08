@@ -34,7 +34,7 @@ describe("toNotionFilters", () => {
         {
           compound: "where",
           property: "Name",
-          type: "string",
+          type: "rich_text",
           operator: "contains",
           value: "Mike",
           nested: [],
@@ -53,7 +53,7 @@ describe("toNotionFilters", () => {
         {
           compound: "where",
           property: "Name",
-          type: "string",
+          type: "rich_text",
           operator: "contains",
           value: "Mike",
           nested: [],
@@ -61,7 +61,7 @@ describe("toNotionFilters", () => {
         {
           compound: "and",
           property: "Company",
-          type: "string",
+          type: "rich_text",
           operator: "contains",
           value: "Tech",
           nested: [],
@@ -69,7 +69,7 @@ describe("toNotionFilters", () => {
         {
           compound: "and",
           property: "Name",
-          type: "string",
+          type: "rich_text",
           operator: "contains",
           value: "Mendez",
           nested: [],
@@ -104,7 +104,7 @@ describe("toNotionFilters", () => {
         {
           compound: "where",
           property: "Name",
-          type: "string",
+          type: "rich_text",
           operator: "contains",
           value: "Mike",
           nested: [],
@@ -112,14 +112,14 @@ describe("toNotionFilters", () => {
         {
           compound: "and",
           property: "Name",
-          type: "string",
+          type: "rich_text",
           operator: "contains",
           value: "",
           nested: [
             {
               compound: "where",
               property: "Company",
-              type: "string",
+              type: "rich_text",
               operator: "contains",
               value: "Tech",
               nested: [],
@@ -127,7 +127,7 @@ describe("toNotionFilters", () => {
             {
               compound: "or",
               property: "Company",
-              type: "string",
+              type: "rich_text",
               operator: "contains",
               value: "Mode",
               nested: [],
