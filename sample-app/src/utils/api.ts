@@ -25,7 +25,7 @@ const DIRECTION_MAP = {
   desc: "descending",
 } as const;
 
-const toNotionSortModel = (gridSortModel: GridSortModel) => {
+export const toNotionSortModel = (gridSortModel: GridSortModel) => {
   const notionSortModel = gridSortModel.map((sortObj) => {
     const { field, sort } = sortObj;
 
@@ -51,7 +51,7 @@ const toNotionFilter = (filter: FilterValue) => {
   };
 };
 
-const toNotionFilters = (filters: FilterValue[]) => {
+export const toNotionFilters = (filters: FilterValue[]) => {
   if (filters.length === 1) {
     return filters.map((filter) => toNotionFilter(filter));
   } else {
