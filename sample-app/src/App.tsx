@@ -15,7 +15,19 @@ const FILTER_OPTIONS = [
     type: "select",
     options: ["High", "Medium", "Low"] as string[],
   },
-  // { property: "Status", label: "Status", type: "select" },
+  {
+    property: "Status",
+    label: "Status",
+    type: "select",
+    options: [
+      "Negotiation",
+      "Closed",
+      "Proposal",
+      "Lost",
+      "Qualified",
+      "Lead",
+    ] as string[],
+  },
 ] as const;
 
 function App() {
@@ -67,7 +79,9 @@ function App() {
     <Container>
       <Typography variant="h3">Sales CRM</Typography>
       <Filters value={filters} onChange={setFilters} options={FILTER_OPTIONS} />
-      <Button onClick={() => fetchCustomer(sortModel, filters)}>Apply</Button>
+      <Button onClick={() => fetchCustomer(sortModel, filters)}>
+        Apply Filter
+      </Button>
       <DataGridPro
         rows={customer}
         columns={columns}

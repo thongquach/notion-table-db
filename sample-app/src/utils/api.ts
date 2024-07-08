@@ -1,5 +1,6 @@
 import { GridSortModel } from "@mui/x-data-grid-pro";
 import axios from "axios";
+import { BOOLEAN_OPERATOR } from "../filters/const";
 import { FilterValue } from "../filters/types";
 import { Customer } from "../types";
 
@@ -38,12 +39,16 @@ export const toNotionSortModel = (gridSortModel: GridSortModel) => {
   return notionSortModel;
 };
 
+const replaceSpaces = (str: string) => str.replace(/\s/g, "_");
 const toNotionFilter = (filter: FilterValue) => {
-  console.log(filter);
   return {
     property: filter.property,
     [filter.type]: {
-      [filter.operator]: filter.value,
+      [replaceSpaces(filter.operator)]: BOOLEAN_OPERATOR.includes(
+        filter.operator
+      )
+        ? true
+        : filter.value,
     },
   };
 };

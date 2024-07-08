@@ -34,3 +34,25 @@ export const convertQueryToCustomers = (query: QueryDatabaseResponse): Customer[
 
   return customers;
 };
+
+export const replaceStringTrueWithBooleanTrue = <T extends Record<string, unknown>>(
+  obj: T | undefined,
+): T | undefined => {
+  if (typeof obj !== 'object' || obj === null) {
+    return obj;
+  }
+
+  for (const key in obj) {
+    if (typeof obj[key] === 'object' && obj[key] !== null) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      obj[key] = replaceStringTrueWithBooleanTrue(obj[key] as Record<string, unknown>);
+    } else if (obj[key] === 'true') {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      obj[key] = true;
+    }
+  }
+
+  return obj;
+};

@@ -1,5 +1,5 @@
 import { MenuItem, Select } from "@mui/material";
-import { OPERATORS_MAP } from "./const";
+import { BOOLEAN_OPERATOR, OPERATORS_MAP } from "./const";
 import { FilterComponentProps, FilterValue } from "./types";
 
 const SelectFilter = ({ value, onChange, option }: FilterComponentProps) => {
@@ -20,19 +20,20 @@ const SelectFilter = ({ value, onChange, option }: FilterComponentProps) => {
           </MenuItem>
         ))}
       </Select>
-      {option.type === "select" && (
-        <Select
-          value={value.value}
-          onChange={(event) => handleChange(event.target.value, "value")}
-          sx={{ minWidth: 200 }}
-        >
-          {option.options.map((value) => (
-            <MenuItem key={value} value={value}>
-              {value}
-            </MenuItem>
-          ))}
-        </Select>
-      )}
+      {option.type === "select" &&
+        !BOOLEAN_OPERATOR.includes(value.operator) && (
+          <Select
+            value={value.value}
+            onChange={(event) => handleChange(event.target.value, "value")}
+            sx={{ minWidth: 200 }}
+          >
+            {option.options.map((value) => (
+              <MenuItem key={value} value={value}>
+                {value}
+              </MenuItem>
+            ))}
+          </Select>
+        )}
     </>
   );
 };
