@@ -1,0 +1,127 @@
+import { Box, Button, MenuItem, Select } from "@mui/material";
+import { FilterValue } from ".";
+import StringFilter from "./StringFilter";
+
+export const options = [
+  { field: "name", label: "Name", type: "string" },
+  { field: "company", label: "Company", type: "string" },
+] as const;
+
+const FILTER_MAP = {
+  string: StringFilter,
+};
+
+const COMPOUND = ["and", "or", "where"];
+
+const Filter = ({
+  value,
+  onChange,
+}: {
+  value: FilterValue;
+  onChange: (value: FilterValue) => void;
+}) => {
+  const handleChange = (
+    newValue: string | undefined,
+    property: keyof FilterValue
+  ) => {
+    onChange({ ...value, [property]: newValue });
+  };
+
+  const handleNestedChange = (newValue: FilterValue, index: number) => {
+    onChange({
+      ...value,
+      nested: value.nested.map((v, i) => (i === index ? newValue : v)),
+    });
+  };
+
+  const FilterComponent = value.type && FILTER_MAP[value.type];
+
+  const addFilterRule = () => {
+    const newFilter = {
+      id: String(Date.now()),
+      compound: value.nested.length === 0 ? ("where" as const) : ("" as const),
+      property: "",
+      type: "string" as const,
+      operator: "",
+      value: "",
+      nested: [],
+    };
+    onChange({ ...value, nested: [...value.nested, newFilter] });
+  };
+
+  const addFilterGroup = () => {
+    const newFilter = {
+      id: String(Date.now()),
+      compound: value.nested.length === 0 ? ("where" as const) : ("" as const),
+      property: "",
+      type: "string" as const,
+      operator: "",
+      value: "",
+      nested: [
+        {
+          id: String(Date.now()),
+          compound: "where" as const,
+          property: "",
+          type: "string" as const,
+          operator: "",
+          value: "",
+          nested: [],
+        },
+      ],
+    };
+    onChange({ ...value, nested: [...value.nested, newFilter] });
+  };
+
+  return (
+    <Box>
+      <Select
+        value={value.compound}
+        onChange={(e) => handleChange(e.target.value, "compound")}
+        sx={{ minWidth: 100 }}
+      >
+        {COMPOUND.map((value) => (
+          <MenuItem key={value} value={value}>
+            {value}
+          </MenuItem>
+        ))}
+      </Select>
+      {value.nested.length > 0 ? (
+        <>
+          {value.nested.map((nestedValue, index) => (
+            <Filter
+              key={index}
+              value={nestedValue}
+              onChange={(newValue) => handleNestedChange(newValue, index)}
+            />
+          ))}
+          <Button onClick={addFilterRule}>Add Filter Rule</Button>
+          <Button onClick={addFilterGroup}>Add Filter Group</Button>
+        </>
+      ) : (
+        <>
+          <Select
+            value={value.property}
+            onChange={(e) => handleChange(e.target.value, "property")}
+            sx={{ minWidth: 100 }}
+          >
+            {options.map(({ field, label }) => (
+              <MenuItem key={field} value={field}>
+                {label}
+              </MenuItem>
+            ))}
+          </Select>
+          {FilterComponent && (
+            <FilterComponent
+              operator={value.operator || ""}
+              setOperator={(operator) => handleChange(operator, "operator")}
+              value={value.value || ""}
+              setValue={(value) => handleChange(value, "value")}
+            />
+          )}
+        </>
+      )}
+    </Box>
+  );
+};
+
+export default Filter;
