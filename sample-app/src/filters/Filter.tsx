@@ -1,4 +1,5 @@
 import { Box, Button, MenuItem, Select, Typography } from "@mui/material";
+import { useEffect } from "react";
 import { COMPONENT_MAP, COMPOUND_OPTIONS } from "./const";
 import { FilterValue, Options } from "./types";
 import { getDefaultFilter } from "./utils";
@@ -7,13 +8,14 @@ const Filter = ({
   value,
   onChange,
   options,
-  disableCompound = false,
+  index,
 }: {
   value: FilterValue;
   onChange: (value: FilterValue) => void;
   options: Options;
-  disableCompound?: boolean;
+  index: number;
 }) => {
+  const compound = value.nested.length >= 2 ? value.nested[1].compound : "and";
   const handleChange = (
     newValue: string | undefined,
     property: keyof FilterValue
@@ -40,6 +42,16 @@ const Filter = ({
     });
   };
 
+  useEffect(() => {
+    onChange({
+      ...value,
+      nested: value.nested.map((filter, index) =>
+        index < 1 ? filter : { ...filter, compound }
+      ),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [compound]);
+
   return (
     <Box sx={{ display: "flex", m: 1, alignItems: "center" }}>
       {value.compound === "where" ? (
@@ -48,7 +60,7 @@ const Filter = ({
         <Select
           value={value.compound}
           onChange={(e) => handleChange(e.target.value, "compound")}
-          disabled={disableCompound}
+          disabled={index >= 2}
           sx={{ minWidth: 100 }}
         >
           {COMPOUND_OPTIONS.map((value) => (
@@ -75,6 +87,7 @@ const Filter = ({
               value={nestedValue}
               onChange={(newValue) => handleNestedChange(newValue, index)}
               options={options}
+              index={index}
             />
           ))}
           <Box>
