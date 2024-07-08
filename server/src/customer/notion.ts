@@ -19,8 +19,6 @@ export const getCustomers = async (
   sortModel?: QueryDatabaseParameters['sorts'],
   filter?: QueryDatabaseParameters['filter'],
 ): Promise<Customer[]> => {
-  console.log(JSON.stringify(sanitizeFilters(filter), null, 2));
-
   const query = await notion.databases.query({
     database_id: databaseId,
     sorts: sortModel,

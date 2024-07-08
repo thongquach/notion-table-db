@@ -99,7 +99,6 @@ export const getCustomers = async (
   sortModel?: GridSortModel,
   filters?: FilterValue[]
 ) => {
-  console.log({ filters, convertedFilters: toNotionFilters(filters || []) });
   const response = await api.get("/customer", {
     params: {
       sortModel: sortModel ? toNotionSortModel(sortModel) : undefined,

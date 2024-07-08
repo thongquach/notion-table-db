@@ -18,7 +18,6 @@ const Filter = ({
   const compound = value.nested.length >= 2 ? value.nested[1].compound : "and";
   const handleChange = (newValue: string, property: keyof FilterValue) => {
     if (property === "property") {
-      console.log({ property, options });
       const option = options.find((option) => option.property === newValue)!;
       onChange({
         ...value,
