@@ -1,4 +1,4 @@
-import { Container, Typography } from "@mui/material";
+import { Button, Container, Typography } from "@mui/material";
 import { DataGridPro, GridSortModel } from "@mui/x-data-grid-pro";
 import { useEffect, useMemo, useState } from "react";
 import Filters, { FilterValue } from "./filters";
@@ -28,9 +28,13 @@ function App() {
   );
   const [sortModel, setSortModel] = useState<GridSortModel>([]);
   const [filters, setFilters] = useState<FilterValue[]>([]);
+  console.log(filters);
 
-  const fetchCustomer = async (sortModel: GridSortModel) => {
-    const customers = await getCustomers(sortModel);
+  const fetchCustomer = async (
+    sortModel: GridSortModel,
+    filters?: FilterValue[]
+  ) => {
+    const customers = await getCustomers(sortModel, filters);
     setCustomers(customers);
   };
 
@@ -43,6 +47,7 @@ function App() {
     <Container>
       <Typography variant="h3">Sales CRM</Typography>
       <Filters value={filters} onChange={setFilters} options={FILTER_OPTIONS} />
+      <Button onClick={() => fetchCustomer(sortModel, filters)}>Apply</Button>
       <DataGridPro
         rows={customer}
         columns={columns}

@@ -3,8 +3,8 @@ import { FilterValue } from ".";
 import StringFilter from "./StringFilter";
 
 export const options = [
-  { field: "name", label: "Name", type: "string" },
-  { field: "company", label: "Company", type: "string" },
+  { field: "Name", label: "Name", type: "string" },
+  { field: "Company", label: "Company", type: "string" },
 ] as const;
 
 const FILTER_MAP = {
