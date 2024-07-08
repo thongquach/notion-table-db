@@ -1,5 +1,5 @@
 import { GridSortModel } from "@mui/x-data-grid-pro";
-import { FilterValue } from "../../filters";
+import { FilterValue } from "../../filters/types";
 import { toNotionFilters, toNotionSortModel } from "../api";
 
 describe("toNotionSortModel", () => {
@@ -23,9 +23,12 @@ describe("toNotionSortModel", () => {
     expect(notionSortModel).toEqual([]);
   });
 });
+
 describe("toNotionFilters", () => {
   it.each([
+    // empty filters
     [[], []],
+    // single filter
     [
       [
         {
@@ -44,6 +47,7 @@ describe("toNotionFilters", () => {
         },
       },
     ],
+    // multiple filters
     [
       [
         {
@@ -90,6 +94,70 @@ describe("toNotionFilters", () => {
             rich_text: {
               contains: "Mendez",
             },
+          },
+        ],
+      },
+    ],
+    // nested filters
+    [
+      [
+        {
+          compound: "where",
+          property: "Name",
+          type: "string",
+          operator: "contains",
+          value: "Mike",
+          nested: [],
+        },
+        {
+          compound: "and",
+          property: "Name",
+          type: "string",
+          operator: "contains",
+          value: "",
+          nested: [
+            {
+              compound: "where",
+              property: "Company",
+              type: "string",
+              operator: "contains",
+              value: "Tech",
+              nested: [],
+            },
+            {
+              compound: "or",
+              property: "Company",
+              type: "string",
+              operator: "contains",
+              value: "Mode",
+              nested: [],
+            },
+          ],
+        },
+      ],
+      {
+        and: [
+          {
+            property: "Name",
+            rich_text: {
+              contains: "Mike",
+            },
+          },
+          {
+            or: [
+              {
+                property: "Company",
+                rich_text: {
+                  contains: "Tech",
+                },
+              },
+              {
+                property: "Company",
+                rich_text: {
+                  contains: "Mode",
+                },
+              },
+            ],
           },
         ],
       },

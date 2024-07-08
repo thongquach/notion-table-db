@@ -1,16 +1,18 @@
-import { Box, Button, MenuItem, Select } from "@mui/material";
-import { FilterValue, Options } from ".";
-import { COMPONENT_MAP, COMPOUND } from "./const";
+import { Box, Button, MenuItem, Select, Typography } from "@mui/material";
+import { COMPONENT_MAP, COMPOUND_OPTIONS } from "./const";
+import { FilterValue, Options } from "./types";
 import { getDefaultFilter } from "./utils";
 
 const Filter = ({
   value,
   onChange,
   options,
+  disableCompound = false,
 }: {
   value: FilterValue;
   onChange: (value: FilterValue) => void;
   options: Options;
+  disableCompound?: boolean;
 }) => {
   const handleChange = (
     newValue: string | undefined,
@@ -31,23 +33,31 @@ const Filter = ({
   const addFilter = (nested = false) => {
     onChange({
       ...value,
-      nested: [...value.nested, getDefaultFilter(value.nested, nested)],
+      nested: [
+        ...value.nested,
+        getDefaultFilter({ value: value.nested, nested, options }),
+      ],
     });
   };
 
   return (
-    <Box sx={{ display: "flex", m: 1 }}>
-      <Select
-        value={value.compound}
-        onChange={(e) => handleChange(e.target.value, "compound")}
-        sx={{ minWidth: 100 }}
-      >
-        {COMPOUND.map((value) => (
-          <MenuItem key={value} value={value}>
-            {value}
-          </MenuItem>
-        ))}
-      </Select>
+    <Box sx={{ display: "flex", m: 1, alignItems: "center" }}>
+      {value.compound === "where" ? (
+        <Typography sx={{ minWidth: 100 }}>Where</Typography>
+      ) : (
+        <Select
+          value={value.compound}
+          onChange={(e) => handleChange(e.target.value, "compound")}
+          disabled={disableCompound}
+          sx={{ minWidth: 100 }}
+        >
+          {COMPOUND_OPTIONS.map((value) => (
+            <MenuItem key={value} value={value}>
+              {value}
+            </MenuItem>
+          ))}
+        </Select>
+      )}
       {value.nested.length > 0 ? (
         <Box
           sx={{
@@ -56,7 +66,7 @@ const Filter = ({
             border: 1,
             p: 1,
             m: 1,
-            bgcolor: "#D3D3D3",
+            bgcolor: "#D1D1D1",
           }}
         >
           {value.nested.map((nestedValue, index) => (

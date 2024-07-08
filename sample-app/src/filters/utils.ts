@@ -1,22 +1,35 @@
-import { FilterValue } from ".";
+import { OPERATORS_MAP } from "./const";
+import { Compound, FilterValue, Options } from "./types";
 
-export const getDefaultFilter = (
-  value: FilterValue[],
-  nested = false
-): FilterValue => {
+export const getDefaultFilter = ({
+  value,
+  nested,
+  options,
+}: {
+  value: FilterValue[];
+  nested: boolean;
+  options: Options;
+}): FilterValue => {
+  let compound: Compound = "where";
+  if (value.length === 1) {
+    compound = "and";
+  } else if (value.length > 1) {
+    compound = value[1].compound;
+  }
+
   return {
-    compound: value.length === 0 ? ("where" as const) : ("" as const),
-    property: "",
-    type: "string" as const,
-    operator: "",
+    compound,
+    property: options[0].property,
+    type: options[0].type,
+    operator: OPERATORS_MAP[options[0].type][0],
     value: "",
     nested: nested
       ? [
           {
-            compound: "where" as const,
-            property: "",
-            type: "string" as const,
-            operator: "",
+            compound: "where",
+            property: options[0].property,
+            type: options[0].type,
+            operator: OPERATORS_MAP[options[0].type][0],
             value: "",
             nested: [],
           },

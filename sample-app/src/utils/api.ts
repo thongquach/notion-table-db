@@ -1,6 +1,6 @@
 import { GridSortModel } from "@mui/x-data-grid-pro";
 import axios from "axios";
-import { FilterValue } from "../filters";
+import { FilterValue } from "../filters/types";
 import { Customer } from "../types";
 
 const api = axios.create({

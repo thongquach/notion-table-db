@@ -1,19 +1,7 @@
 import { Box, Button } from "@mui/material";
-import { FilterType } from "./const";
 import Filter from "./Filter";
+import { FilterValue, Options } from "./types";
 import { getDefaultFilter } from "./utils";
-
-export type FilterValue = {
-  compound: "and" | "or" | "where" | "";
-  property: string;
-  type: FilterType;
-  operator: string;
-  value: string;
-  nested: FilterValue[];
-};
-
-type Option = { property: string; label: string; type: FilterType };
-export type Options = Readonly<Option[]>;
 
 const Filters = ({
   value,
@@ -34,7 +22,7 @@ const Filters = ({
   };
 
   const addFilter = (nested = false) => {
-    onChange([...value, getDefaultFilter(value, nested)]);
+    onChange([...value, getDefaultFilter({ value, nested, options })]);
   };
 
   return (
@@ -45,6 +33,7 @@ const Filters = ({
           value={filter}
           onChange={(value) => handleFilterChange(value, index)}
           options={options}
+          disableCompound={index > 1}
         />
       ))}
       <Button onClick={() => addFilter()}>Add Filter Rule</Button>
