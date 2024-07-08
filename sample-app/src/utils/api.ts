@@ -52,19 +52,23 @@ const toNotionFilter = (filter: FilterValue) => {
 };
 
 export const toNotionFilters = (filters: FilterValue[]) => {
+  if (filters.length === 0) {
+    return [];
+  }
   if (filters.length === 1) {
     return filters.map((filter) => toNotionFilter(filter));
-  } else {
-    return {
-      [filters[1].compound]: filters.map((filter) => toNotionFilter(filter)),
-    };
   }
+
+  return {
+    [filters[1].compound]: filters.map((filter) => toNotionFilter(filter)),
+  };
 };
 
 export const getCustomers = async (
   sortModel?: GridSortModel,
   filters?: FilterValue[]
 ) => {
+  console.log({ filters, convertedFilters: toNotionFilters(filters || []) });
   const response = await api.get("/customer", {
     params: {
       sortModel: sortModel ? toNotionSortModel(sortModel) : undefined,

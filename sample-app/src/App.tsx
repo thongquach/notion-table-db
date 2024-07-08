@@ -31,7 +31,7 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   const fetchCustomer = async (
-    sortModel: GridSortModel,
+    sortModel?: GridSortModel,
     filters?: FilterValue[]
   ) => {
     setLoading(true);
@@ -42,7 +42,7 @@ function App() {
   };
 
   useEffect(() => {
-    fetchCustomer([]);
+    fetchCustomer();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
