@@ -73,7 +73,7 @@ const Filter = ({
   };
 
   return (
-    <Box>
+    <Box sx={{ display: "flex", m: 1 }}>
       <Select
         value={value.compound}
         onChange={(e) => handleChange(e.target.value, "compound")}
@@ -86,7 +86,16 @@ const Filter = ({
         ))}
       </Select>
       {value.nested.length > 0 ? (
-        <>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            border: 1,
+            p: 1,
+            m: 1,
+            bgcolor: "#D3D3D3",
+          }}
+        >
           {value.nested.map((nestedValue, index) => (
             <Filter
               key={index}
@@ -94,9 +103,11 @@ const Filter = ({
               onChange={(newValue) => handleNestedChange(newValue, index)}
             />
           ))}
-          <Button onClick={addFilterRule}>Add Filter Rule</Button>
-          <Button onClick={addFilterGroup}>Add Filter Group</Button>
-        </>
+          <Box>
+            <Button onClick={addFilterRule}>Add Filter Rule</Button>
+            <Button onClick={addFilterGroup}>Add Filter Group</Button>
+          </Box>
+        </Box>
       ) : (
         <>
           <Select
