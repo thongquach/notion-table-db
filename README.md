@@ -1,4 +1,4 @@
-# Running the Project
+# Running the Project Manually
 
 Create a `server/.env` file:
 
@@ -27,6 +27,22 @@ yarn start
 ```
 
 Connect on [http://localhost:3000/]()
+
+# Running the Project using Docker
+
+Create a `server/.env` file:
+
+```
+NOTION_SECRET=
+NOTION_DATABASE_ID=
+PORT=8000
+```
+
+From root directory:
+
+```
+docker-compose up --build
+```
 
 # Features
 
