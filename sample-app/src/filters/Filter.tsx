@@ -1,6 +1,7 @@
 import { Box, Button, MenuItem, Select } from "@mui/material";
 import { FilterValue, Options } from ".";
 import { COMPONENT_MAP, COMPOUND } from "./const";
+import { getDefaultFilter } from "./utils";
 
 const Filter = ({
   value,
@@ -27,40 +28,11 @@ const Filter = ({
 
   const FilterComponent = value.type && COMPONENT_MAP[value.type];
 
-  const addFilterRule = () => {
-    const newFilter = {
-      id: String(Date.now()),
-      compound: value.nested.length === 0 ? ("where" as const) : ("" as const),
-      property: "",
-      type: "string" as const,
-      operator: "",
-      value: "",
-      nested: [],
-    };
-    onChange({ ...value, nested: [...value.nested, newFilter] });
-  };
-
-  const addFilterGroup = () => {
-    const newFilter = {
-      id: String(Date.now()),
-      compound: value.nested.length === 0 ? ("where" as const) : ("" as const),
-      property: "",
-      type: "string" as const,
-      operator: "",
-      value: "",
-      nested: [
-        {
-          id: String(Date.now()),
-          compound: "where" as const,
-          property: "",
-          type: "string" as const,
-          operator: "",
-          value: "",
-          nested: [],
-        },
-      ],
-    };
-    onChange({ ...value, nested: [...value.nested, newFilter] });
+  const addFilter = (nested = false) => {
+    onChange({
+      ...value,
+      nested: [...value.nested, getDefaultFilter(value.nested, nested)],
+    });
   };
 
   return (
@@ -96,8 +68,8 @@ const Filter = ({
             />
           ))}
           <Box>
-            <Button onClick={addFilterRule}>Add Filter Rule</Button>
-            <Button onClick={addFilterGroup}>Add Filter Group</Button>
+            <Button onClick={() => addFilter()}>Add Filter Rule</Button>
+            <Button onClick={() => addFilter(true)}>Add Filter Group</Button>
           </Box>
         </Box>
       ) : (
