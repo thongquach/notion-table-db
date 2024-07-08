@@ -11,17 +11,30 @@ const TYPE_MAP = {
   string: "rich_text",
 } as const;
 
+const convertFilter = (filter: FilterValue) => {
+  return {
+    property: filter.property,
+    [TYPE_MAP[filter.type]]: {
+      [filter.operator]: filter.value,
+    },
+  };
+};
+
 const convertFilters = (filters?: FilterValue[]) => {
-  if (filters?.length === 1) {
-    return filters.map((filter) => {
-      return {
-        property: filter.property,
-        [TYPE_MAP[filter.type]]: {
-          [filter.operator]: filter.value,
-        },
-      };
-    });
+  if (!filters) {
+    return undefined;
   }
+
+  if (filters.length === 1) {
+    return filters.map((filter) => convertFilter(filter));
+  }
+
+  if (filters?.length === 2) {
+    return {
+      [filters[1].compound]: filters.map((filter) => convertFilter(filter)),
+    };
+  }
+
   return []; // Return an empty array or handle other cases as needed
 };
 

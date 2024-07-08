@@ -28,14 +28,17 @@ function App() {
   );
   const [sortModel, setSortModel] = useState<GridSortModel>([]);
   const [filters, setFilters] = useState<FilterValue[]>([]);
-  console.log(filters);
+  const [loading, setLoading] = useState(false);
 
   const fetchCustomer = async (
     sortModel: GridSortModel,
     filters?: FilterValue[]
   ) => {
+    setLoading(true);
+    setCustomers([]);
     const customers = await getCustomers(sortModel, filters);
     setCustomers(customers);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -51,11 +54,10 @@ function App() {
       <DataGridPro
         rows={customer}
         columns={columns}
-        loading={customer.length === 0}
+        loading={loading}
         rowHeight={40}
         sortModel={sortModel}
         onSortModelChange={(newSortModel) => {
-          setCustomers([]);
           setSortModel(newSortModel);
           fetchCustomer(newSortModel);
         }}
