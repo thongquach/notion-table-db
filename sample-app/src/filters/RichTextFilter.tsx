@@ -2,7 +2,7 @@ import { MenuItem, Select, TextField } from "@mui/material";
 import { OPERATORS_MAP } from "./const";
 import { FilterComponentProps, FilterValue } from "./types";
 
-const StringFilter = ({ value, onChange }: FilterComponentProps) => {
+const RichTextFilter = ({ value, onChange }: FilterComponentProps) => {
   const handleChange = (newValue: string, property: keyof FilterValue) => {
     onChange({ ...value, [property]: newValue });
   };
@@ -28,4 +28,4 @@ const StringFilter = ({ value, onChange }: FilterComponentProps) => {
   );
 };
 
-export default StringFilter;
+export default RichTextFilter;

@@ -1,6 +1,6 @@
 import { FC } from "react";
+import RichTextFilter from "./RichTextFilter";
 import MultiSelectFilter from "./SelectFilter";
-import StringFilter from "./StringFilter";
 import { FilterComponentProps, FilterType } from "./types";
 
 export const OPERATORS_MAP: Record<FilterType, Array<string>> = {
@@ -9,7 +9,7 @@ export const OPERATORS_MAP: Record<FilterType, Array<string>> = {
 };
 
 export const COMPONENT_MAP: Record<FilterType, FC<FilterComponentProps>> = {
-  rich_text: StringFilter,
+  rich_text: RichTextFilter,
   select: MultiSelectFilter,
 };
 
