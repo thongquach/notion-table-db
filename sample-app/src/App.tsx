@@ -1,6 +1,6 @@
 import { Button, Container, Typography } from "@mui/material";
 import { DataGridPro, GridSortModel } from "@mui/x-data-grid-pro";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Filters from "./filters";
 import { FilterValue } from "./filters/types";
 import { Customer } from "./types";
@@ -32,46 +32,43 @@ const FILTER_OPTIONS = [
   { property: "Phone", label: "Phone", type: "rich_text" },
 ] as const;
 
+const columns = [
+  { field: "name", headerName: "Name", width: 150 },
+  { field: "company", headerName: "Company", width: 150 },
+  { field: "status", headerName: "Status", width: 150 },
+  { field: "priority", headerName: "Priority", width: 150 },
+  { field: "estimatedValue", headerName: "Estimated Value", width: 150 },
+  { field: "email", headerName: "Email", width: 150 },
+  { field: "phone", headerName: "Phone", width: 150 },
+  { field: "expectedClose", headerName: "Expected Close", width: 150 },
+  { field: "lastContact", headerName: "Last Contact", width: 150 },
+] as const;
+
 function App() {
   const [customer, setCustomers] = useState<Customer[]>([]);
-  const columns = useMemo(
-    () => [
-      { field: "name", headerName: "Name", width: 150 },
-      { field: "company", headerName: "Company", width: 150 },
-      { field: "status", headerName: "Status", width: 150 },
-      { field: "priority", headerName: "Priority", width: 150 },
-      { field: "estimatedValue", headerName: "Estimated Value", width: 150 },
-      { field: "email", headerName: "Email", width: 150 },
-      { field: "phone", headerName: "Phone", width: 150 },
-      { field: "expectedClose", headerName: "Expected Close", width: 150 },
-      { field: "lastContact", headerName: "Last Contact", width: 150 },
-    ],
-    []
-  );
   const [sortModel, setSortModel] = useState<GridSortModel>([]);
   const [filters, setFilters] = useState<FilterValue[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchCustomer = async (
-    sortModel?: GridSortModel,
-    filters?: FilterValue[]
-  ) => {
-    try {
-      setLoading(true);
-      setCustomers([]);
-      const customers = await getCustomers(sortModel, filters);
-      setCustomers(customers);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchCustomer = useCallback(
+    async (sortModel?: GridSortModel, filters?: FilterValue[]) => {
+      try {
+        setLoading(true);
+        setCustomers([]);
+        const customers = await getCustomers(sortModel, filters);
+        setCustomers(customers);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [setLoading, setCustomers]
+  );
 
   useEffect(() => {
     fetchCustomer();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchCustomer]);
 
   return (
     <Container>
