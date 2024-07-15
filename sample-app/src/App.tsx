@@ -1,8 +1,8 @@
 import { Button, Container, Typography } from "@mui/material";
 import { DataGridPro, GridSortModel } from "@mui/x-data-grid-pro";
 import { useEffect, useMemo, useState } from "react";
-import Filters from "./filters";
-import { FilterValue } from "./filters/types";
+import Filters from "./Filters";
+import { FilterValue } from "./Filters/types";
 import { Customer } from "./types";
 import { getCustomers } from "./utils/api";
 

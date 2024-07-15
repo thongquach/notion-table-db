@@ -1,5 +1,5 @@
 import { GridSortModel } from "@mui/x-data-grid-pro";
-import { FilterValue } from "../../filters/types";
+import { FilterValue } from "../../Filters/types";
 import { toNotionFilters, toNotionSortModel } from "../api";
 
 describe("toNotionSortModel", () => {

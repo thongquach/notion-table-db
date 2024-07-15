@@ -1,7 +1,7 @@
 import { GridSortModel } from "@mui/x-data-grid-pro";
 import axios from "axios";
-import { BOOLEAN_OPERATOR } from "../filters/const";
-import { FilterValue } from "../filters/types";
+import { BOOLEAN_OPERATOR } from "../Filters/Filter/const";
+import { FilterValue } from "../Filters/types";
 import { Customer } from "../types";
 
 const api = axios.create({

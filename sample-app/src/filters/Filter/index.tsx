@@ -1,8 +1,8 @@
 import { Box, Button, MenuItem, Select, Typography } from "@mui/material";
 import { useEffect } from "react";
+import { FilterValue, Options } from "../types";
+import { getDefaultFilter } from "../utils";
 import { COMPONENT_MAP, COMPOUND_OPTIONS, OPERATORS_MAP } from "./const";
-import { FilterValue, Options } from "./types";
-import { getDefaultFilter } from "./utils";
 
 const Filter = ({
   value,

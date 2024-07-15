@@ -1,4 +1,4 @@
-import { OPERATORS_MAP } from "./const";
+import { OPERATORS_MAP } from "./Filter/const";
 import { Compound, FilterValue, Options } from "./types";
 
 export const getDefaultFilter = ({

@@ -1,7 +1,7 @@
 import { FC } from "react";
+import { FilterComponentProps, FilterType } from "../types";
 import RichTextFilter from "./RichTextFilter";
-import MultiSelectFilter from "./SelectFilter";
-import { FilterComponentProps, FilterType } from "./types";
+import SelectFilter from "./SelectFilter";
 
 // extensibility: you can add more filter types here
 export const OPERATORS_MAP: Record<FilterType, Array<string>> = {
@@ -11,10 +11,10 @@ export const OPERATORS_MAP: Record<FilterType, Array<string>> = {
 
 export const BOOLEAN_OPERATOR = ["empty", "is not empty"];
 
-// // extensibility: you can add more filter types here
+// extensibility: you can add more filter types here
 export const COMPONENT_MAP: Record<FilterType, FC<FilterComponentProps>> = {
   rich_text: RichTextFilter,
-  select: MultiSelectFilter,
+  select: SelectFilter,
 };
 
 export const COMPOUND_OPTIONS = ["and", "or"];

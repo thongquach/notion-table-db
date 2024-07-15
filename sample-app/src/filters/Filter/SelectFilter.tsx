@@ -1,6 +1,6 @@
 import { MenuItem, Select } from "@mui/material";
+import { FilterComponentProps, FilterValue } from "../types";
 import { BOOLEAN_OPERATOR, OPERATORS_MAP } from "./const";
-import { FilterComponentProps, FilterValue } from "./types";
 
 const SelectFilter = ({ value, onChange, option }: FilterComponentProps) => {
   const handleChange = (newValue: string, property: keyof FilterValue) => {
